@@ -1,7 +1,9 @@
 import sys
+# 상위 디렉토리의 모듈 사용하기 위해 경로 추가
 sys.path.append("../")  # to import module
 
 # Handling Value Errors
+# 로지스틱 회귀 모델에 사용되는 헬퍼 함수 임포트
 from utils import denominator, log_prob
 
 from typing import Tuple
@@ -11,45 +13,54 @@ import matplotlib.pyplot as plt
 
 class LogisticRegression:
 
+    # 클래수의 초기화 메서드 - 매개 변수 받아 모델 초기화
     def __init__(
         self,
-        n_features: int = 2,
-        is_train: bool = True,
-        learning_rate: float = 0.1,
-        is_render: bool = True
+        n_features: int = 2,         # 특성의 수
+        is_train: bool = True,       # 학습 모드 여부
+        learning_rate: float = 0.1,  # 학습률
+        is_render: bool = True       # 그래픽 출력을 위한 렌더링 모드 여부
     ):
 
+        # 클래스 내부 변수 '__n_features'에 입력된 'n_features'값 저장
         self.__n_features = n_features
 
         # Randomly init the weights
         # n_features + bias
+        # 가중치 행렬 'W' 무작위로 초기화 - 특성의 수와 편향에 따라 크기 결정
         self.W = np.random.rand(n_features + 1)
 
         # Gradients
+        # 그레이디언트 저장을 위한 변수들 초기화
         self.__model_grad = 0
         self.__sigmoid_grad = 0
         self.__binary_cross_entropy_grad = 0
 
         # Train parameters
+        # 학습 관련 매개 변수들 초기화
         self.__is_train = is_train
         self.__learning_rate = learning_rate
 
         # Only for 2 features
+        # 특성이 2개일 때만 그래픽 출력을 위한 렌더링 모드 활성화
         if n_features == 2:
             self.__is_render = is_render
         else:
             self.__is_render = False
 
         # epoch step number
+        # 에포크 변수 초기화
         self.step = 0
 
         # Rendering
+        # 그래픽 출력을 위한 초기 설정
         if self.__is_render:
             self.fig = plt.figure()
             plt.ion()  # Use interactive mode
             self.ax = self.fig.add_subplot(111)
             self.line = None
-
+            
+# -------------------> 여기부터 다시 시작
     @property
     def is_train(self) -> bool:
         return self.__is_train
